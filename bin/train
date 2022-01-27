@@ -1,0 +1,31 @@
+#! /extra/scratch05/aalmudevar/APL_mod/venv/bin/python
+
+import argparse
+import yaml
+from pathlib import Path
+
+DEFAULT_DIST_FIN = 5560
+
+def parse_args():
+
+    parser = argparse.ArgumentParser(description='launch options')
+    parser.add_argument('net', nargs='?', type=str, help='net configuration file')
+    parser.add_argument('train', nargs='?', type=str, help='training configuration file')
+    parser.add_argument('--dist_ini', type=int, required=False, default=0, help='Initial distance in samples')
+    parser.add_argument('--dist_fin', type=int, required=False, default=DEFAULT_DIST_FIN, help='Final distance in samples')
+
+    return parser.parse_args()
+
+
+if __name__ == '__main__':
+    args = parse_args()
+    path = Path(__file__).parent.resolve()
+    with open(path/("../configs/"+args.net+".yaml"), 'r') as f:
+        net_type = yaml.load(f, yaml.FullLoader)['net_type']
+    if net_type.lower() == 'ae':
+        from APL.models.AE import train
+    elif net_type.lower() == 'ae_dist':
+        from APL.models.AE_dist import train
+    else:
+        raise ValueError('Net type is incorrect')
+    train(args)

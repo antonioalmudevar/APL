@@ -1,0 +1,10 @@
+net_type: "AE_dist"
+
+net_design:
+  channels: [16,32,64]
+  kernel_size: [3,3,3]
+  nconv_residual: 1
+  time_pooling: [2,2,2]
+  distance_pooling: [2,2,2]
+  dropout: 0
+  cbam: True
